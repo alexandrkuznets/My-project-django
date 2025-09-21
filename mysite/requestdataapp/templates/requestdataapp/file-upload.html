@@ -1,0 +1,26 @@
+{%extends 'requestdataapp/base.html' %}
+
+{% block Title %}
+File upload
+{% endblock %}
+
+{% block body %}
+<h1>Upload file</h1>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>
+            <input name="myfile" type="file">
+        </p>
+
+        <button type="submit">
+            Upload
+        </button>
+        <div>{% if size > 1 %}
+            <h5>
+                <p style="color: red;">ERROR: The file is too large</p>
+            </h5>
+            {% endif %}
+        <div>
+    </form>
+{% endblock %}
