@@ -9,9 +9,7 @@ File upload
 
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <p>
-            <input name="myfile" type="file">
-        </p>
+        {{ form.as_p }}
 
         <button type="submit">
             Upload
