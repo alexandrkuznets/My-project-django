@@ -24,8 +24,10 @@
 {%endif%}
 
 <div>
-    <a href="{% url 'shopapp:product_form' %}">
-        Create a new product
-    </a>
+    {% if perms.shopapp.add_product %}
+        <a href="{% url 'shopapp:product_form' %}">
+            Create a new product
+        </a>
+    {% endif %}
 </div>
 {%endblock%}
