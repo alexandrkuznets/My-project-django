@@ -8,16 +8,20 @@ from .views import (
     get_session_view,
     logout_view,
     MyLogoutViews,
+    AboutMeView,
+    RegisterView,
 )
-app_name = "myauth"
+app_name = "accounts"
 
 urlpatterns = [
     # path("login/", login_view, name="login"),
     path("login/", LoginView.as_view(
-                template_name="myauth/login.html",
+                template_name="accounts/login.html",
                 redirect_authenticated_user=True,
                 ), name="login"),
     path("logout/", MyLogoutViews.as_view(), name="logout"),
+    path("about-me/", AboutMeView.as_view(), name="about-me"),
+    path("register/", RegisterView.as_view(), name="register"),
     path("cookie/get/", get_cookie_view, name="cookie-get"),
     path("cookie/set/", set_cookie_view, name="cookie-set"),
     path("session/set/", set_session_view, name="session-set"),
