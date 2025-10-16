@@ -6,8 +6,9 @@ from .models import Product, Order
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = "name", "price", "description", "discount"
+        fields = "name", "price", "description", "discount", "preview"
 
+    images = forms.ImageField(widget=forms.ClearableFileInput(attrs={"muliple": True}),)
 
 class OrderForm(forms.ModelForm):
     class Meta:
@@ -18,3 +19,4 @@ class GroupForm(forms.ModelForm):
     class Meta:
         model = Group
         fields = "name",
+
