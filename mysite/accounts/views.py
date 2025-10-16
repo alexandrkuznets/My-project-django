@@ -55,25 +55,6 @@ class ProfileDetailsView(DetailView):
         context = {"form": form, "profile": profile, "pk": profile.pk}
         return render(request, self.template_name, context)
 
-# class ProductUpdateView(UserPassesTestMixin, UpdateView):
-#     def test_func(self):
-#         return self.request.user == self.get_object().user or self.request.user.is_superuser
-#
-#     model = Profile
-#     # fields = "name", "price", "description", "discount", "preview"
-#     template_name = "accounts/profile_update.html"
-#     form = ProfileForm
-#
-#     def get_success_url(self):
-#         return reverse("accounts:profile_update", kwargs={"pk": self.object.pk},)
-#
-#     def post(self, request: HttpRequest) -> HttpResponse:
-#         form = ProfileForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             form.save()
-#             return redirect("accounts:profile_details")
-#         context = {"form": form}
-#         return render(request, self.template_name, context)
 
 class RegisterView(CreateView):
     form_class = UserCreationForm
