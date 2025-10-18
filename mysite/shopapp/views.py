@@ -9,7 +9,7 @@ from django.views.generic import TemplateView, ListView, DetailView, CreateView,
 from django.urls import reverse_lazy
 
 from .forms import ProductForm, OrderForm, GroupForm
-from .models import Product, Order
+from .models import Product, Order, ProductImage
 
 
 # Create your views here.
@@ -53,7 +53,8 @@ class GroupsListView(View):
 
 class ProductDetailsView(DetailView):
     template_name = "shopapp/products-details.html"
-    model = Product
+    # model = Product
+    queryset = Product.objects.prefetch_related("images")
     context_object_name = "product"
 
 
@@ -66,15 +67,12 @@ class ProductsListView(ListView):
 class ProductCreateView(PermissionRequiredMixin, CreateView):
     permission_required = "shopapp.add_product"
 
-    # def test_func(self):
-    #     return self.request.user.is_superuser
-
     def form_valid(self, form):
         form.instance.created_by = self.request.user
         return super().form_valid(form)
 
     model = Product
-    fields = "name", "price", "description", "discount"
+    fields = "name", "price", "description", "discount", "preview"
     success_url = reverse_lazy("shopapp:products_list")
 
 
@@ -84,11 +82,19 @@ class ProductUpdateView(PermissionRequiredMixin, UserPassesTestMixin, UpdateView
 
     permission_required = "shopapp.change_product"
     model = Product
-    fields = "name", "price", "description", "discount"
+    # fields = "name", "price", "description", "discount", "preview"
     template_name_suffix = "_update_form"
+    form_class = ProductForm
 
     def get_success_url(self):
         return reverse("shopapp:product_details", kwargs={"pk": self.object.pk},)
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        for image in form.files.getlist("images"):
+            ProductImage.objects.create(product=self.object, image=image)
+
+        return response
 
 
 class ProductDeleteView(DeleteView):
@@ -121,6 +127,7 @@ class OrderDetailView(PermissionRequiredMixin, DetailView):
         Order.objects.select_related("user").prefetch_related('products')
     )
 
+
 class OrderUpdateView(UpdateView):
     model = Order
     fields = "delivery_address", "promocode", "user", "products"
@@ -129,9 +136,11 @@ class OrderUpdateView(UpdateView):
     def get_success_url(self):
         return reverse("shopapp:order_details", kwargs={"pk": self.object.pk}, )
 
+
 class OrderDeleteView(DeleteView):
     model = Order
     success_url = reverse_lazy("shopapp:orders_list")
+
 
 class ProductDataExportView(View):
     def get(self, request: HttpRequest) -> JsonResponse:
@@ -146,6 +155,7 @@ class ProductDataExportView(View):
             for product in products
         ]
         return JsonResponse({"products": products_data})
+
 
 class OrderDataExportView(UserPassesTestMixin, View):
     def test_func(self):

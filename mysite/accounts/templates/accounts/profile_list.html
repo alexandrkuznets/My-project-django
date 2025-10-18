@@ -1,0 +1,23 @@
+{% extends 'accounts/base.html' %}
+
+{% block title%}
+    User list
+{% endblock %}
+
+{%block body %}
+<h1>Users:</h1>
+{%if users%}
+<div>
+{%for user in users%}
+<div>
+    <p>
+        <a href="{% url 'accounts:profile_details' pk=user.pk %}">{{user.user.username}}</a>
+    </p>
+</div>
+{%endfor%}
+</div>
+{%else%}
+<h3>No users yet</h3>
+{%endif%}
+
+{%endblock%}

@@ -1,16 +1,60 @@
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.views import LogoutView
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import TemplateView, CreateView, ListView, DetailView, UpdateView
 from .models import Profile
+from .forms import ProfileForm
 
 class AboutMeView(TemplateView):
     template_name = "accounts/about-me.html"
+
+    def get(self, request: HttpRequest) -> HttpResponse:
+        profile = Profile.objects.get_or_create(user=request.user)
+        form = ProfileForm
+        context = {"form": form, "profile": profile}
+        return render(request, self.template_name, context)
+
+    def post(self, request: HttpRequest) -> HttpResponse:
+        profile = Profile.objects.get_or_create(user=request.user)
+        form = ProfileForm(request.POST, request.FILES, instance=profile[0])
+        if form.is_valid():
+            form.save()
+            return redirect("accounts:about-me")
+        context = {"form": form, "profile": profile}
+        return render(request, self.template_name, context)
+
+class ProfileListView(ListView):
+    template_name = "accounts/profile_list.html"
+    context_object_name = "users"
+    queryset = Profile.objects.all()
+
+class ProfileDetailsView(DetailView):
+    template_name = "accounts/profile_details.html"
+    context_object_name = "profile"
+    queryset = Profile.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        form = ProfileForm()
+        context['current_user'] = self.request.user
+        context['form'] = form
+        return context
+
+    def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+        profile = self.get_object()
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect("accounts:profile_details", pk=profile.pk)
+        context = {"form": form, "profile": profile, "pk": profile.pk}
+        return render(request, self.template_name, context)
+
 
 class RegisterView(CreateView):
     form_class = UserCreationForm
