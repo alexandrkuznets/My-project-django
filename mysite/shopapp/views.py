@@ -31,6 +31,7 @@ class ShopIndexView(View):
             "time_running": default_timer(),
             "products": products,
             "vacancies": vacancies,
+            "items": 5
         }
 
         return render(request, "shopapp/shop-index.html", context=context)
