@@ -13,6 +13,7 @@ from .views import (
     FooBarView,
     ProfileListView,
     ProfileDetailsView,
+    HelloView,
 )
 app_name = "accounts"
 
@@ -32,4 +33,5 @@ urlpatterns = [
     path("foo-bar/", FooBarView.as_view(), name="foo-bar"),
     path("profiles/", ProfileListView.as_view(), name="profiles-list"),
     path("profiles/<int:pk>", ProfileDetailsView.as_view(), name="profile_details"),
+    path("hello/", HelloView.as_view(), name="hello"),
 ]
