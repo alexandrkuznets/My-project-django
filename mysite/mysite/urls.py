@@ -25,6 +25,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, Sp
 urlpatterns = [
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('req/', include("requestdataapp.urls")),
+    path('blog/', include("blogapp.urls")),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger'),
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
@@ -33,7 +34,7 @@ urlpatterns = [
 
 urlpatterns += i18n_patterns(
     path('accounts/', include('accounts.urls')),
-    path('shop/', include("shopapp.urls")),
+    path('shop/', include("blogapp.urls")),
     path('admin/', admin.site.urls),
 )
 
