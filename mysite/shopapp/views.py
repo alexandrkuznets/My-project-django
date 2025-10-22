@@ -1,23 +1,34 @@
+"""
+В этом модуле лежат различные наборы представлений.
+
+Разные view интернет-магазина: по товарам, заказам и т.д.
+"""
+
 from django.contrib.messages import success
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from timeit import default_timer
-from  django.contrib.auth.models import Group
+from django.contrib.auth.models import Group
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.filters import  SearchFilter, OrderingFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.utils import extend_schema, OpenApiResponse
 from .serializers import ProductSerializer, OrderSerializer
 from .forms import ProductForm, OrderForm, GroupForm
 from .models import Product, Order, ProductImage
 
 
 # Create your views here.
-
+@extend_schema(description="Product views CRUD")
 class ProductViewSet(ModelViewSet):
+    """
+    Набор представлений для действий над Product
+    Полный CRUD для сущностей товара
+    """
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [
@@ -39,6 +50,15 @@ class ProductViewSet(ModelViewSet):
         "discount",
     ]
 
+    @extend_schema(
+        summary="Get one product by ID",
+        description="Retrieves **product**, returns 404 if not found",
+        responses={200: ProductSerializer, 404: OpenApiResponse(description="Empty response, product by ID not found")}
+    )
+    def retrieve(self, *args, **kwargs):
+        return super().retrieve(*args, **kwargs)
+
+
 class OrderViewSet(ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
@@ -57,6 +77,7 @@ class OrderViewSet(ModelViewSet):
         "user",
     ]
 
+
 class ShopIndexView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
         vacancies = [
@@ -64,7 +85,7 @@ class ShopIndexView(View):
             ("Director", True),
             ("Security", False),
             ("Consultant", False),
-            ]
+        ]
         products = [
             ("Laptop", 1999),
             ("Desktop", 2999),
@@ -78,6 +99,7 @@ class ShopIndexView(View):
         }
 
         return render(request, "shopapp/shop-index.html", context=context)
+
 
 class GroupsListView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
@@ -131,7 +153,7 @@ class ProductUpdateView(PermissionRequiredMixin, UserPassesTestMixin, UpdateView
     form_class = ProductForm
 
     def get_success_url(self):
-        return reverse("shopapp:product_details", kwargs={"pk": self.object.pk},)
+        return reverse("shopapp:product_details", kwargs={"pk": self.object.pk}, )
 
     def form_valid(self, form):
         response = super().form_valid(form)
@@ -188,7 +210,7 @@ class OrderDeleteView(DeleteView):
 
 class ProductDataExportView(View):
     def get(self, request: HttpRequest) -> JsonResponse:
-        products  = Product.objects.order_by("pk").all()
+        products = Product.objects.order_by("pk").all()
         products_data = [
             {
                 "pk": product.pk,
