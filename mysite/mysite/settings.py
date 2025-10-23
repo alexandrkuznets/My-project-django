@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 
-from django.conf.global_settings import LOGIN_REDIRECT_URL, MEDIA_URL
+from django.conf.global_settings import LOGIN_REDIRECT_URL, MEDIA_URL, LOGGING
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'shopapp.apps.ShopappConfig',
     'requestdataapp.apps.RequestdataappConfig',
     'accounts.apps.MyauthConfig',
+    'blogapp.apps.BlogappConfig',
 ]
 
 MIDDLEWARE = [
@@ -170,3 +171,24 @@ SPECTACULAR_SETTINGS = {
     'SERVE_INCLUDE_SCHEMA': False,
 }
 
+LOGGING = {
+    'version': 1,
+    'filters': {
+      'require_debug_true': {
+          '()': 'django.utils.log.RequireDebugTrue',
+      }
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django.db.backends': {
+            'level': 'DEBUG',
+            'handlers': ['console']
+        }
+    },
+}

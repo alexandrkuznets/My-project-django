@@ -98,7 +98,7 @@ class ShopIndexView(View):
             "items": 5
         }
 
-        return render(request, "shopapp/shop-index.html", context=context)
+        return render(request, "blogapp/shop-index.html", context=context)
 
 
 class GroupsListView(View):
@@ -107,7 +107,7 @@ class GroupsListView(View):
             "form": GroupForm(),
             "groups": Group.objects.prefetch_related('permissions').all(),
         }
-        return render(request, "shopapp/groups-list.html", context=context)
+        return render(request, "blogapp/groups-list.html", context=context)
 
     def post(self, request: HttpRequest):
         form = GroupForm(request.POST)
@@ -118,20 +118,20 @@ class GroupsListView(View):
 
 
 class ProductDetailsView(DetailView):
-    template_name = "shopapp/products-details.html"
+    template_name = "blogapp/products-details.html"
     # model = Product
     queryset = Product.objects.prefetch_related("images")
     context_object_name = "product"
 
 
 class ProductsListView(ListView):
-    template_name = "shopapp/products-list.html"
+    template_name = "blogapp/article_list.html"
     context_object_name = "products"
     queryset = Product.objects.filter(archived=False)
 
 
 class ProductCreateView(PermissionRequiredMixin, CreateView):
-    permission_required = "shopapp.add_product"
+    permission_required = "blogapp.add_product"
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user
@@ -139,21 +139,21 @@ class ProductCreateView(PermissionRequiredMixin, CreateView):
 
     model = Product
     fields = "name", "price", "description", "discount", "preview"
-    success_url = reverse_lazy("shopapp:products_list")
+    success_url = reverse_lazy("blogapp:products_list")
 
 
 class ProductUpdateView(PermissionRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         return self.request.user == self.get_object().created_by or self.request.user.is_superuser
 
-    permission_required = "shopapp.change_product"
+    permission_required = "blogapp.change_product"
     model = Product
     # fields = "name", "price", "description", "discount", "preview"
     template_name_suffix = "_update_form"
     form_class = ProductForm
 
     def get_success_url(self):
-        return reverse("shopapp:product_details", kwargs={"pk": self.object.pk}, )
+        return reverse("blogapp:product_details", kwargs={"pk": self.object.pk}, )
 
     def form_valid(self, form):
         response = super().form_valid(form)
@@ -165,7 +165,7 @@ class ProductUpdateView(PermissionRequiredMixin, UserPassesTestMixin, UpdateView
 
 class ProductDeleteView(DeleteView):
     model = Product
-    success_url = reverse_lazy("shopapp:products_list")
+    success_url = reverse_lazy("blogapp:products_list")
 
     def form_valid(self, form):
         success_url = self.get_success_url()
@@ -177,7 +177,7 @@ class ProductDeleteView(DeleteView):
 class OrderCreateView(CreateView):
     model = Order
     fields = "delivery_address", "promocode", "user", "products"
-    success_url = reverse_lazy("shopapp:orders_list")
+    success_url = reverse_lazy("blogapp:orders_list")
 
 
 class OrderListView(LoginRequiredMixin, ListView):
@@ -187,7 +187,7 @@ class OrderListView(LoginRequiredMixin, ListView):
 
 
 class OrderDetailView(PermissionRequiredMixin, DetailView):
-    permission_required = "shopapp.view_order"
+    permission_required = "blogapp.view_order"
     context_object_name = "order"
     queryset = (
         Order.objects.select_related("user").prefetch_related('products')
@@ -200,12 +200,12 @@ class OrderUpdateView(UpdateView):
     template_name_suffix = "_update_form"
 
     def get_success_url(self):
-        return reverse("shopapp:order_details", kwargs={"pk": self.object.pk}, )
+        return reverse("blogapp:order_details", kwargs={"pk": self.object.pk}, )
 
 
 class OrderDeleteView(DeleteView):
     model = Order
-    success_url = reverse_lazy("shopapp:orders_list")
+    success_url = reverse_lazy("blogapp:orders_list")
 
 
 class ProductDataExportView(View):
