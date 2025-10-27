@@ -1,6 +1,7 @@
 from django.db import models
 from  django.contrib.auth.models import User
 from django.utils.translation import gettext as _
+from django.urls import reverse
 # Create your models here.
 def product_preview_directory_path(instance: "Product", file_name: str) -> str:
     return "products/product_{pk}/preview/{filename}".format(pk=instance.pk, filename=file_name)
@@ -23,12 +24,15 @@ class Product(models.Model):
     price = models.DecimalField(default=0, max_digits=8, decimal_places=2)
     discount = models.SmallIntegerField(default=0)
     created_at = models.TimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     archived = models.BooleanField(default=False)
     preview = models.ImageField(null=True, blank=True, upload_to=product_preview_directory_path)
 
     def __str__(self):
         return f"Product(pk={self.pk}, name={self.name!r})"
+
+    def get_absolute_url(self):
+        return reverse("shopapp:product_details", kwargs={"pk": self.pk})
 
 def product_images_directory_path(instance: "ProductImage", filename: str) -> str:
     return "products/product_{pk}/images/{filename}".format(pk=instance.product.pk, filename=filename)

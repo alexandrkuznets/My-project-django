@@ -1,0 +1,128 @@
+[
+  {
+    "model": "shopapp.product",
+    "pk": 1,
+    "fields": {
+      "name": "Laptop",
+      "description": "",
+      "price": "1000.00",
+      "discount": 0,
+      "created_at": "10:51:55.777",
+      "created_by": 1,
+      "archived": false,
+      "preview": ""
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 2,
+    "fields": {
+      "name": "Desktop",
+      "description": "One of the most powerful parts of Django is the automatic admin interface. It reads metadata from your models to provide a quick, model-centric interface where trusted users can manage content on your site. The admin’s recommended use is limited to an organization’s internal management tool. It’s not intended for building your entire front end around.",
+      "price": "1500.00",
+      "discount": 0,
+      "created_at": "10:51:55.777",
+      "created_by": 1,
+      "archived": true,
+      "preview": ""
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 3,
+    "fields": {
+      "name": "Smartphone",
+      "description": "",
+      "price": "2000.00",
+      "discount": 0,
+      "created_at": "10:51:55.777",
+      "created_by": 1,
+      "archived": false,
+      "preview": "products/product_3/preview/vk.png"
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 4,
+    "fields": {
+      "name": "PC",
+      "description": "This is good PC!",
+      "price": "25000.00",
+      "discount": 0,
+      "created_at": "08:42:46.148",
+      "created_by": 1,
+      "archived": true,
+      "preview": ""
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 5,
+    "fields": {
+      "name": "Nokia",
+      "description": "Super phone and great",
+      "price": "1000.00",
+      "discount": 0,
+      "created_at": "14:58:03.119",
+      "created_by": 1,
+      "archived": false,
+      "preview": "products/product_5/preview/vk.png"
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 6,
+    "fields": {
+      "name": "Lap12",
+      "description": "The nice",
+      "price": "4000.00",
+      "discount": 10,
+      "created_at": "16:14:08.477",
+      "created_by": 1,
+      "archived": true,
+      "preview": ""
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 7,
+    "fields": {
+      "name": "Tablet",
+      "description": "a new tablet",
+      "price": "1000.00",
+      "discount": 11,
+      "created_at": "16:16:43.160",
+      "created_by": 1,
+      "archived": true,
+      "preview": ""
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 8,
+    "fields": {
+      "name": "ret",
+      "description": "The best",
+      "price": "1000.00",
+      "discount": 0,
+      "created_at": "16:34:50.629",
+      "created_by": 1,
+      "archived": false,
+      "preview": ""
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 9,
+    "fields": {
+      "name": "Kompukter",
+      "description": "Low",
+      "price": "900.00",
+      "discount": 0,
+      "created_at": "17:21:45.659",
+      "created_by": 4,
+      "archived": false,
+      "preview": "products/product_9/preview/vk.png"
+    }
+  }
+]

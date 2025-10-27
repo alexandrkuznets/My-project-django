@@ -1,9 +1,13 @@
 from django.urls import path
 
-from .views import ArticleListView
-
-
+from .views import (
+    ArticlesListView,
+    ArticlesDetailView,
+    LatestArticlesFeed,
+)
 
 urlpatterns = [
-    path("article/", ArticleListView.as_view(), name='article'),
+    path("articles/", ArticlesListView.as_view(), name='articles'),
+    path("articles/<int:pk>/", ArticlesDetailView.as_view(), name='article'),
+    path("articles/latest/feed/", LatestArticlesFeed(), name='articles-feed'),
 ]
