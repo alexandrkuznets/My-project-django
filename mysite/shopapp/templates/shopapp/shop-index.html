@@ -1,5 +1,5 @@
 {% extends 'shopapp/base.html' %}
-
+{% load cache %}
 
 <title>
     {% block title%}
@@ -33,10 +33,11 @@
     Time running: {{time_running}}
 </div>
 
+{% cache 100 lorem %}
 <div>
     {% lorem 3 p%}
 </div>
-
+{% endcache %}
 <div>
     <ul>
         Required for our store!

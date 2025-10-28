@@ -11,11 +11,14 @@ from django.contrib.syndication.views import Feed
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from timeit import default_timer
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, User
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.decorators import action, parser_classes
@@ -95,6 +98,11 @@ class ProductViewSet(ModelViewSet):
     def retrieve(self, *args, **kwargs):
         return super().retrieve(*args, **kwargs)
 
+    @method_decorator(cache_page(60 * 2))
+    def list(self, *args, **kwargs):
+        print("hello product list")
+        return super().list(*args, **kwargs)
+
 
 class OrderViewSet(ModelViewSet):
     queryset = Order.objects.all()
@@ -116,6 +124,8 @@ class OrderViewSet(ModelViewSet):
 
 
 class ShopIndexView(View):
+
+    # @method_decorator(cache_page(60 *2))
     def get(self, request: HttpRequest) -> HttpResponse:
         vacancies = [
             ("Manager", True),
@@ -136,7 +146,7 @@ class ShopIndexView(View):
         }
         log.debug("Products for shop index: %s", products)
         log.info("rendering shop index ")
-
+        print("shop index context", context)
         return render(request, "shopapp/shop-index.html", context=context)
 
 
@@ -249,16 +259,20 @@ class OrderDeleteView(DeleteView):
 
 class ProductDataExportView(View):
     def get(self, request: HttpRequest) -> JsonResponse:
-        products = Product.objects.order_by("pk").all()
-        products_data = [
-            {
-                "pk": product.pk,
-                "name": product.name,
-                "price": product.price,
-                "archived": product.archived,
-            }
-            for product in products
-        ]
+        cache_key = "products_data_export"
+        products_data = cache.get(cache_key)
+        if products_data is None:
+            products = Product.objects.order_by("pk").all()
+            products_data = [
+                {
+                    "pk": product.pk,
+                    "name": product.name,
+                    "price": product.price,
+                    "archived": product.archived,
+                }
+                for product in products
+            ]
+            cache.set(cache_key, products_data, 300)
         return JsonResponse({"products": products_data})
 
 
@@ -293,3 +307,36 @@ class LatestProductFeed(Feed):
 
     def item_description(self, item: Product):
         return item.description[:200]
+
+class UserOrdersListView(ListView):
+    model = Order
+    context_object_name = "orders"
+    template_name = "shopapp:order_list"
+
+    def get_queryset(self):
+        user_id = self.kwargs["pk"]
+        user = User.objects.get(pk=user_id)
+        self.owner = user
+        return Order.objects.filter(user=user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['current_user'] = self.owner
+        return context
+
+class UserOrderDataExportView(View):
+
+    def get(self, request: HttpRequest, *args, **kwargs) -> JsonResponse:
+        user_id = self.kwargs["pk"]
+        try:
+            user = User.objects.get(pk=user_id)
+        except:
+            return JsonResponse({"error": "Пользователь не найден"}, status=404)
+        cache_key = f"orders_data_export{user_id}"
+        serializer_data = cache.get(cache_key)
+        if serializer_data is None:
+            orders = Order.objects.filter(user=user).order_by("pk")
+            serializer = OrderSerializer(orders, many=True)
+            serializer_data = serializer.data
+            cache.set(cache_key, serializer.data, 300)
+        return JsonResponse({"order": serializer_data})
