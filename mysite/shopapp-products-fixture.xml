@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object model="shopapp.product" pk="1">
+        <field name="name" type="CharField">Laptop</field>
+        <field name="description" type="TextField"></field>
+        <field name="price" type="DecimalField">1000.00</field>
+        <field name="discount" type="SmallIntegerField">0</field>
+        <field name="created_at" type="TimeField">10:51:55.777000</field>
+        <field name="created_by" rel="ManyToOneRel" to="auth.user">1</field>
+        <field name="archived" type="BooleanField">False</field>
+        <field name="preview" type="FileField"></field>
+    </object>
+    <object model="shopapp.product" pk="2">
+        <field name="name" type="CharField">Desktop</field>
+        <field name="description" type="TextField">One of the most powerful parts of Django is the automatic admin
+            interface. It reads metadata from your models to provide a quick, model-centric interface where trusted
+            users can manage content on your site. The admin’s recommended use is limited to an organization’s internal
+            management tool. It’s not intended for building your entire front end around.
+        </field>
+        <field name="price" type="DecimalField">1500.00</field>
+        <field name="discount" type="SmallIntegerField">0</field>
+        <field name="created_at" type="TimeField">10:51:55.777000</field>
+        <field name="created_by" rel="ManyToOneRel" to="auth.user">1</field>
+        <field name="archived" type="BooleanField">True</field>
+        <field name="preview" type="FileField"></field>
+    </object>
+    <object model="shopapp.product" pk="3">
+        <field name="name" type="CharField">Smartphone</field>
+        <field name="description" type="TextField"></field>
+        <field name="price" type="DecimalField">2000.00</field>
+        <field name="discount" type="SmallIntegerField">0</field>
+        <field name="created_at" type="TimeField">10:51:55.777000</field>
+        <field name="created_by" rel="ManyToOneRel" to="auth.user">1</field>
+        <field name="archived" type="BooleanField">False</field>
+        <field name="preview" type="FileField">products/product_3/preview/vk.png</field>
+    </object>
+    <object model="shopapp.product" pk="4">
+        <field name="name" type="CharField">PC</field>
+        <field name="description" type="TextField">This is good PC!</field>
+        <field name="price" type="DecimalField">25000.00</field>
+        <field name="discount" type="SmallIntegerField">0</field>
+        <field name="created_at" type="TimeField">08:42:46.148000</field>
+        <field name="created_by" rel="ManyToOneRel" to="auth.user">1</field>
+        <field name="archived" type="BooleanField">True</field>
+        <field name="preview" type="FileField"></field>
+    </object>
+    <object model="shopapp.product" pk="5">
+        <field name="name" type="CharField">Nokia</field>
+        <field name="description" type="TextField">Super phone and great</field>
+        <field name="price" type="DecimalField">1000.00</field>
+        <field name="discount" type="SmallIntegerField">0</field>
+        <field name="created_at" type="TimeField">14:58:03.119000</field>
+        <field name="created_by" rel="ManyToOneRel" to="auth.user">1</field>
+        <field name="archived" type="BooleanField">False</field>
+        <field name="preview" type="FileField">products/product_5/preview/vk.png</field>
+    </object>
+    <object model="shopapp.product" pk="6">
+        <field name="name" type="CharField">Lap12</field>
+        <field name="description" type="TextField">The nice</field>
+        <field name="price" type="DecimalField">4000.00</field>
+        <field name="discount" type="SmallIntegerField">10</field>
+        <field name="created_at" type="TimeField">16:14:08.477000</field>
+        <field name="created_by" rel="ManyToOneRel" to="auth.user">1</field>
+        <field name="archived" type="BooleanField">True</field>
+        <field name="preview" type="FileField"></field>
+    </object>
+    <object model="shopapp.product" pk="7">
+        <field name="name" type="CharField">Tablet</field>
+        <field name="description" type="TextField">a new tablet</field>
+        <field name="price" type="DecimalField">1000.00</field>
+        <field name="discount" type="SmallIntegerField">11</field>
+        <field name="created_at" type="TimeField">16:16:43.160000</field>
+        <field name="created_by" rel="ManyToOneRel" to="auth.user">1</field>
+        <field name="archived" type="BooleanField">True</field>
+        <field name="preview" type="FileField"></field>
+    </object>
+    <object model="shopapp.product" pk="8">
+        <field name="name" type="CharField">ret</field>
+        <field name="description" type="TextField">The best</field>
+        <field name="price" type="DecimalField">1000.00</field>
+        <field name="discount" type="SmallIntegerField">0</field>
+        <field name="created_at" type="TimeField">16:34:50.629000</field>
+        <field name="created_by" rel="ManyToOneRel" to="auth.user">1</field>
+        <field name="archived" type="BooleanField">False</field>
+        <field name="preview" type="FileField"></field>
+    </object>
+    <object model="shopapp.product" pk="9">
+        <field name="name" type="CharField">Kompukter</field>
+        <field name="description" type="TextField">Low</field>
+        <field name="price" type="DecimalField">900.00</field>
+        <field name="discount" type="SmallIntegerField">0</field>
+        <field name="created_at" type="TimeField">17:21:45.659000</field>
+        <field name="created_by" rel="ManyToOneRel" to="auth.user">4</field>
+        <field name="archived" type="BooleanField">False</field>
+        <field name="preview" type="FileField">products/product_9/preview/vk.png</field>
+    </object>
+</django-objects>
