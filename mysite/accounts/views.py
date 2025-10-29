@@ -8,9 +8,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView, CreateView, ListView, DetailView, UpdateView
+from django.views.decorators.cache import cache_page
 from .models import Profile
 from .forms import ProfileForm
 from django.utils.translation import gettext_lazy as _, ngettext
+from random import random
 
 class HelloView(View):
     welcome_message = _("welcome hello world")
@@ -118,9 +120,10 @@ def set_cookie_view(request: HttpRequest) -> HttpResponse:
     response.set_cookie("fizz", "buzz", max_age=3600)
     return response
 
+@cache_page(60 * 2)
 def get_cookie_view(request: HttpRequest) -> HttpResponse:
     value = request.COOKIES.get("fizz", "default value")
-    return HttpResponse(f"Cookie value: {value!r}")
+    return HttpResponse(f"Cookie value: {value!r} + {random()}")
 
 @permission_required("accounts:view_profile", raise_exception=True)
 def set_session_view(request: HttpRequest) -> HttpResponse:
