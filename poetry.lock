@@ -83,20 +83,6 @@ Django = ">=5.2"
 drf = ["djangorestframework"]
 
 [[package]]
-name = "django-rest-framework"
-version = "0.1.0"
-description = "alias."
-optional = false
-python-versions = "*"
-groups = ["main"]
-files = [
-    {file = "django-rest-framework-0.1.0.tar.gz", hash = "sha256:47a8f496fa69e3b6bd79f68dd7a1527d907d6b77f009e9db7cf9bb21cc565e4a"},
-]
-
-[package.dependencies]
-djangorestframework = "*"
-
-[[package]]
 name = "djangorestframework"
 version = "3.16.1"
 description = "Web APIs for Django, made easy."
@@ -719,4 +705,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12"
-content-hash = "e0414a965db288c1a7a1c7a7d9a31be692fcc193bde23a41322bc1c949c33c42"
+content-hash = "039bfd8661fa95c2a120c9797246268e8abc2f301cb7dd7fa349ae2e7f5d0088"
